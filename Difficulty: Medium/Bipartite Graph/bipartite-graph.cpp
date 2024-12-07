@@ -6,29 +6,27 @@ using namespace std;
 // } Driver Code Ends
 
 class Solution {
-public:
-    bool isBipartite(vector<vector<int>>& graph) {
-        vector<int> vis(graph.size(), -1);
-        for(int k = 0; k < graph.size(); k++){
-            if (vis[k] == -1){
-                vis[0] = k;
-                queue<int> q;
-                q.push(k);
-                while(!q.empty()){
-                    int temp = q.front();
-                    q.pop();
-                    for(int j: graph[temp]){
-                        if (vis[j] == -1){
-                            if(!vis[temp]) vis[j] = 1;
-                            else vis[j] = 0; 
-                            q.push(j);
-                        }
-                        else{
-                            if(vis[j]!=vis[temp]) continue;
-                            else return false; 
-                        }
-                    }
-                }
+  private:
+    bool dfs(vector<int>& vis, vector<vector<int>> & adj, int i){
+        for (j: adj[i]){
+            if (vis[j] == -1){
+                vis[j] = !vis[i];
+                dfs(vis, adj, j);
+            }
+            else if(vis[i] == vis[j]){
+                return false;
+            }
+        }
+        return true;
+    }
+  public:
+    bool isBipartite(vector<vector<int>>& adj) {
+        // Code here
+        vector <int> vis(adj.size(), -1);
+        for (int  i =0 ; i < adj.size(); i++){
+            if(vis[i]==-1){
+                vis[i] = 0;
+                if (!dfs(vis, adj, i)) return false;
             }
         }
         return true;

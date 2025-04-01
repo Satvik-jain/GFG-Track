@@ -9,23 +9,21 @@ int t[10001][10001];
 
 class Solution {
 public:
-    
-    int help(int W, vector<int> &val, vector<int> &wt, int n, vector<vector<int>>&v) {
-        if (n == 0 || W == 0) return 0;
-        if (v[W][n] != -1) return v[W][n];
-
-        if (W < wt[n - 1]) {  
-            return v[W][n] = help(W, val, wt, n - 1, v);
-        } 
-
-        return v[W][n] = max(val[n - 1] + help(W - wt[n - 1], val, wt, n - 1, v),
-                              help(W, val, wt, n - 1, v));
-    }
 
     int knapsack(int W, vector<int> &val, vector<int> &wt) {
         int n = val.size();
-        vector<vector<int>> t(W+1, vector<int>(n+1, -1));
-        return help(W, val, wt, n, t);
+        vector<vector<int>> t(W+1, vector<int>(n+1, 0));
+        for (int i = 1; i < W+1; i++){
+            for (int j = 1; j< n+1; j++){
+                if (i < wt[j - 1]){
+                    t[i][j] = t[i][j-1];
+                }
+                else{
+                    t[i][j] = max(val[j-1] + t[i-wt[j-1]][j-1], t[i][j-1]);
+                }
+            }
+        }
+        return t[W][n];
     }
 };
 

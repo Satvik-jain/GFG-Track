@@ -1,62 +1,29 @@
-//{ Driver Code Starts
-#include <bits/stdc++.h>
-using namespace std;
-
-
-// } Driver Code Ends
 class Solution {
   public:
     // Function to return Breadth First Traversal of given graph.
-    vector<int> bfsOfGraph(vector<vector<int>> &adj) {
+    vector<int> bfs(vector<vector<int>> &adj) {
         // Code here
-        queue <int> q;
+        int n = adj.size();
+        queue<int> q;
         q.push(0);
-        vector <int> ans;
-        int vis[adj.size()] = {0};
+        vector <int> vis(n,0);
         vis[0] = 1;
+        vector<int> v;
+        // v.push_back(0);
         while(!q.empty()){
             int temp = q.front();
+            v.push_back(temp);
             q.pop();
+            vis[temp] = 1;
             for (auto it: adj[temp]){
-                if (!vis[it])
-                {
+                if(vis[it]==0){
                     q.push(it);
-                    vis[it] = 1;
+
+                    vis[it]++;
                 }
+
             }
-            ans.push_back(temp);
         }
-        return ans;
+        return v;
     }
 };
-
-//{ Driver Code Starts.
-
-int main() {
-    int tc;
-    cin >> tc;
-    while (tc--) {
-        int V, E;
-        cin >> V >> E;
-
-        // Now using vector of vectors instead of array of vectors
-        vector<vector<int>> adj(V);
-
-        for (int i = 0; i < E; i++) {
-            int u, v;
-            cin >> u >> v;
-            adj[u].push_back(v);
-            adj[v].push_back(u); // For undirected graph, add both u->v and v->u
-        }
-
-        Solution obj;
-        vector<int> ans = obj.bfsOfGraph(adj);
-        for (int i = 0; i < ans.size(); i++) {
-            cout << ans[i] << " ";
-        }
-        cout << endl;
-    }
-    return 0;
-}
-
-// } Driver Code Ends

@@ -1,29 +1,17 @@
 class Solution {
   public:
-    bool f(vector<int> v[], vector<int> &vis){
-        for(int j = 0; j < vis.size(); j++){
-            if(!vis[j]){
-                queue<pair<int, int>> q;
-                q.push({j, -1});
-                vis[j] = 1;
-                while(!q.empty()){
-                    int temp = q.front().first;
-                    // cout << temp << endl;
-                    int old = q.front().second;
-                    q.pop();
-                    for (int i : v[temp]){
-                        if((i != old) && (vis[i] == 1)) return true;
-                        if (!vis[i]){
-                            vis[i] = 1;
-                            q.push({i, temp});
-                        }
-                    }
-                } 
+    bool dfs(int i, int old, vector<int> &vis, vector<int> V[]){
+        for (int j: V[i]){
+            if((vis[j] == 1) && (j != old)){
+                return true;
             }
-            
+            if(!vis[j]){
+                vis[j]=1;
+                if (dfs(j, i , vis, V)) return true;
+                
+            }
         }
         return false;
-        
     }
     bool isCycle(int V, vector<vector<int>>& edges) {
         // Code here
@@ -34,6 +22,15 @@ class Solution {
             v[edges[i][0]].push_back(edges[i][1]);
         }
         vector<int> vis(V, 0);
-        return f(v, vis);
+        int old = -1;
+        bool ans = false;
+        for(int j = 0; j < vis.size(); j++){
+            if(!vis[j]){
+                vis[j] = 1;
+                ans = dfs(j, old, vis, v);
+                if (ans) return ans;
+            }
+        }
+        return ans;
     }
 };

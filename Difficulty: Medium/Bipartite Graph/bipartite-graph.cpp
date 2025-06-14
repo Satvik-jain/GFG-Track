@@ -1,40 +1,33 @@
 class Solution {
   public:
+  
+    bool dfs(vector<int> adj[], vector<int> &v, int i, int color){
+        v[i] = color;
+        for (int j : adj[i]){
+            if (v[j]==-1){
+                if (!dfs(adj, v, j, !color)) return false;
+            }
+            else{
+                if (v[j] == color) return false;
+            }
+        }
+        return true;
+    }
     bool isBipartite(int V, vector<vector<int>> &edges) {
-        // Code here
-        int n = edges.size();
-        int m = edges[0].size();
-        queue <int> q;
-        vector<int> v(n, -1);
+        vector <int> v(V, -1);
         
-        int n2 = 0;
-        for (auto& edge : edges) {
-            n2 = max(n2, max(edge[0], edge[1]));
-        }
-
-        vector<vector<int>> adj(n2 + 1);
-    
-        for (auto& edge : edges) {
-            int u = edge[0], v = edge[1];
-            adj[u].push_back(v);
-            adj[v].push_back(u); 
-        }
-        
-        q.push(0);
-        v[0] = 0;
-        
-        while(!q.empty()){
-            int temp = q.front();
-            q.pop();
-            for (int i: adj[temp]){
-                if (v[i]==-1){
-                    v[i] = !v[temp];
-                    q.push(i);
-                }
-                else{
-                    if (v[i] == v[temp]) return false;
+        vector<int> adj[V];
+        for (int i = 0; i < edges.size(); i++){
+            adj[edges[i][1]].push_back(edges[i][0]);
+            adj[edges[i][0]].push_back(edges[i][1]);
+        };
                 }
             }
+        
+        for (int i = 0; i < V; i++) {
+            if (v[i] == -1) {  // Fixed: only start DFS for unvisited vertices
+                if (!dfs(adj, v, i, 0)) {
+                    return false
         }
         return true;
     }
